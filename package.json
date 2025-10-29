@@ -1,0 +1,24 @@
+{
+  "name": "simple_todo_list",
+  "version": "1.0.0",
+  "description": "",
+  "main": "code.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NickAlexeev4488/simple_todo_list.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NickAlexeev4488/simple_todo_list/issues"
+  },
+  "homepage": "https://github.com/NickAlexeev4488/simple_todo_list#readme",
+  "dependencies": {
+    "vite": "^7.1.12"
+  }
+}
