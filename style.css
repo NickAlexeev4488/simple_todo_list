@@ -50,3 +50,29 @@ input:focus {
 .searchInput::placeholder {
   color: var(--white);
 }
+
+.mainBlock{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.newCardButton{
+  width: 50%;
+  height: 48px;
+  border: 2px solid var(--white);
+  border-radius: 48px;
+  margin-top: 16px;
+  color: var(--white);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+
+.trashCanIcon{
+  width: 50px;
+  height: 50px;
+  background: url('imgs/trashCan.svg') no-repeat center;
+  background-size: contain;
+}
