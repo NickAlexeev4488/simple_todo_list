@@ -98,10 +98,16 @@ function renderCards() {
 
     let cardBlock = document.createElement('div')
     cardBlock.classList.add('cardBlock')
+    if (card.completed) {
+      cardBlock.classList.add('completed')
+    }
 
     let cardName = document.createElement('h3')
     cardName.classList.add('cardName')
     cardName.textContent = card.cardName
+    if (card.completed) {
+      cardName.classList.add('completedName')
+    }
 
     let cardText = document.createElement('p')
     cardText.classList.add('cardText')
@@ -110,6 +116,16 @@ function renderCards() {
     let cardDate = document.createElement('span')
     cardDate.classList.add('cardDate')
     cardDate.textContent = card.cardDate
+
+    let completeCheckbox = document.createElement('input')
+    completeCheckbox.classList.add('completeCheckbox')
+    completeCheckbox.type = 'checkbox'
+    completeCheckbox.classList.add('completeCheckbox')
+    completeCheckbox.checked = card.completed || false
+    completeCheckbox.addEventListener('change', () => {
+      card.completed = completeCheckbox.checked
+      renderCards()
+    })
 
     let editButton = document.createElement('button')
     editButton.classList.add('editButton')
@@ -133,7 +149,7 @@ function renderCards() {
     })
 
     cardBlockTopLeft.append(cardName, cardDate)
-    cardBlockTopRight.append(editButton, deleteButton)
+    cardBlockTopRight.append(completeCheckbox, editButton, deleteButton)
     cardBlockTop.append(cardBlockTopLeft, cardBlockTopRight)
     cardBlockBottom.append(cardText)
     cardBlock.append(cardBlockTop, cardBlockBottom)
@@ -165,7 +181,8 @@ newCardButton2.addEventListener('click', () => {
   let cardData = {
     cardName: newCardName.value,
     cardText: newCardText.value,
-    cardDate: newCardDate.value
+    cardDate: newCardDate.value,
+    completed: false
   }
 
   if (editingCard !== null) {

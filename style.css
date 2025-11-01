@@ -222,6 +222,14 @@ textarea {
   margin-bottom: 16px;
 }
 
+.completed{
+  border: 5px solid var(--dark-white);
+}
+
+.completedName{
+  text-decoration: line-through var(--white);
+}
+
 .cardBlockTop, .cardBlockBottom{
   display: flex;
   width: 100%;
@@ -239,6 +247,11 @@ textarea {
   color: var(--white);
 }
 
+.cardBlockTopRight{
+  display: flex;
+  align-items: center;
+}
+
 .editButton, .deleteButton{
   cursor: pointer;
   border: solid var(--white);
@@ -249,4 +262,20 @@ textarea {
 
 .editButton{
   margin-right: 16px;
+}
+
+.completeCheckbox{
+  height: 32px;
+  width: 32px;
+  margin-right: 16px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--brown);
+  border: 2px solid var(--white);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.completeCheckbox:checked{
+  background-color: var(--white);
 }
