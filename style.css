@@ -302,3 +302,10 @@ textarea {
   border: solid var(--dark-white);
   color: var(--dark-white);
 }
+
+.emptyMessage{
+  color: var(--white);
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+}

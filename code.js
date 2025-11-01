@@ -107,16 +107,32 @@ body.append(blackBlock, header, main)
 let cards = []
 let editingCard = null
 let currentFilter = 'all'
+let searchQuery = ''
 
 function renderCards() {
   cardContainer.innerHTML = ''
 
+  // Фильтрация по статусу и поиску
   let filteredCards = cards.filter(card => {
-    if (currentFilter === 'completed') return card.completed
-    if (currentFilter === 'uncompleted') return !card.completed
+    if (currentFilter === 'completed' && !card.completed) return false
+    if (currentFilter === 'uncompleted' && card.completed) return false
+
+    if (searchQuery && !card.cardName.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false
+    }
+
     return true
   })
 
+  if (filteredCards.length === 0) {
+    let emptyMsg = document.createElement('p')
+    emptyMsg.classList.add('emptyMessage')
+    emptyMsg.textContent = 'Нет записей, удовлетворяющих условиям поиска.'
+    cardContainer.appendChild(emptyMsg)
+    return
+  }
+
+  // Отрисовка карточек
   filteredCards.forEach((card) => {
     let cardBlockTop = document.createElement('div')
     cardBlockTop.classList.add('cardBlockTop')
@@ -216,6 +232,11 @@ sortByDateButton.addEventListener('click', () => {
   renderCards()
 })
 
+// Поиск по названию
+searchInput.addEventListener('input', () => {
+  searchQuery = searchInput.value.trim()
+  renderCards()
+})
 
 newCardButton.addEventListener('click', () => {
   editingCard = null
