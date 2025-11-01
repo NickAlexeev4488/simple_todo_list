@@ -108,6 +108,7 @@ let cards = []
 let editingCard = null
 let currentFilter = 'all'
 let searchQuery = ''
+let dragSrcIndex = null
 
 function renderCards() {
   cardContainer.innerHTML = ''
@@ -134,6 +135,7 @@ function renderCards() {
 
   // Отрисовка карточек
   filteredCards.forEach((card) => {
+    let index = cards.indexOf(card)
     let cardBlockTop = document.createElement('div')
     cardBlockTop.classList.add('cardBlockTop')
 
@@ -148,6 +150,8 @@ function renderCards() {
 
     let cardBlock = document.createElement('div')
     cardBlock.classList.add('cardBlock')
+    cardBlock.setAttribute('draggable', 'true')
+
     if (card.completed) cardBlock.classList.add('completed')
 
     let cardName = document.createElement('h3')
@@ -190,6 +194,30 @@ function renderCards() {
     deleteButton.textContent = 'Удалить'
     deleteButton.addEventListener('click', () => {
       cards.splice(cards.indexOf(card), 1)
+      renderCards()
+    })
+
+    // Drag and Drop обработчики
+    cardBlock.addEventListener('dragstart', () => {
+      dragSrcIndex = index
+    })
+
+    cardBlock.addEventListener('dragover', (e) => {
+      e.preventDefault()
+    })
+
+    cardBlock.addEventListener('dragleave', () => {
+      cardBlock.classList.remove('drag-over')
+    })
+
+    cardBlock.addEventListener('drop', () => {
+      if (dragSrcIndex === null) {
+        return
+      }
+      let draggedCard = cards.splice(dragSrcIndex, 1)[0]
+      let dropIndex = index
+      cards.splice(dropIndex, 0, draggedCard)
+      dragSrcIndex = null
       renderCards()
     })
 
@@ -238,6 +266,7 @@ searchInput.addEventListener('input', () => {
   renderCards()
 })
 
+// Создание и редактирование карточек
 newCardButton.addEventListener('click', () => {
   editingCard = null
   newCardName.value = 'Новая запись'
