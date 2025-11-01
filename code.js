@@ -228,6 +228,7 @@ function renderCards() {
     cardBlock.append(cardBlockTop, cardBlockBottom)
     cardContainer.appendChild(cardBlock)
   })
+  saveCards()
 }
 
 // Кнопки фильтрации
@@ -305,3 +306,25 @@ newCardButton2.addEventListener('click', () => {
   newCardBlock.classList.add('hidden')
   blackBlock.classList.add('hidden')
 })
+
+// Сохранение карточек
+function saveCards() {
+  localStorage.setItem('simpleListCards', JSON.stringify(cards))
+}
+
+// Загрузка карточек при запуске
+function loadCards() {
+  let stored = localStorage.getItem('simpleListCards')
+  if (stored) {
+    try {
+      cards = JSON.parse(stored)
+      if (!Array.isArray(cards)) cards = []
+    } catch (e) {
+      cards = []
+    }
+  }
+  renderCards()
+}
+
+// Загружаем карточки при старте
+loadCards()
