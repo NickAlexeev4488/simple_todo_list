@@ -33,30 +33,36 @@ newCardButton.innerText = 'Новая запись'
 
 // Блок затемнения
 let blackBlock = document.createElement('div')
-blackBlock.classList.add('blackBlock')
-blackBlock.classList.add('hidden')
+blackBlock.classList.add('blackBlock', 'hidden')
 
 // Блок добавления карточки
 let newCardBlock = document.createElement('div')
-newCardBlock.classList.add('newCardBlock')
-newCardBlock.classList.add('hidden')
+newCardBlock.classList.add('newCardBlock', 'hidden')
+
 let newCardBlockTop = document.createElement('div')
 newCardBlockTop.classList.add('newCardBlockTop')
+
 let newCardBlockBottom = document.createElement('div')
 newCardBlockBottom.classList.add('newCardBlockBottom')
+
 let newCardBlockBottomRight = document.createElement('div')
 newCardBlockBottomRight.classList.add('newCardBlockBottomRight')
+
 let newCardName = document.createElement('input')
 newCardName.classList.add('newCardName')
+
 let newCardClose = document.createElement('button')
 newCardClose.classList.add('newCardClose')
+
 let newCardText = document.createElement('textarea')
 newCardText.classList.add('newCardText')
 newCardText.placeholder = 'Пишите здесь'
+
 let newCardDate = document.createElement('input')
 newCardDate.classList.add('newCardDate')
 newCardDate.type = 'date'
 newCardDate.required = true
+
 let newCardButton2 = document.createElement('button')
 newCardButton2.classList.add('newCardButton2')
 
@@ -69,27 +75,55 @@ newCardBlock.append(newCardBlockTop, newCardBlockBottom)
 let cardContainer = document.createElement('div')
 cardContainer.classList.add('cardContainer')
 
-// Добавляем дочерние теги main
-main.appendChild(newCardButton)
-main.appendChild(newCardBlock)
-main.appendChild(cardContainer)
+// Контейнер кнопок
+let controlPanel = document.createElement('div')
+controlPanel.classList.add('controlPanel')
 
-body.appendChild(blackBlock)
-body.appendChild(header)
-body.appendChild(main)
+// Фильтры
+let filterAllButton = document.createElement('button')
+filterAllButton.classList.add('sortButton', 'activeFilter')
+filterAllButton.textContent = 'Все'
+
+let filterCompletedButton = document.createElement('button')
+filterCompletedButton.classList.add('sortButton')
+filterCompletedButton.textContent = 'Выполненные'
+
+let filterUncompletedButton = document.createElement('button')
+filterUncompletedButton.classList.add('sortButton')
+filterUncompletedButton.textContent = 'Невыполненные'
+
+// Сортировка
+let sortByDateButton = document.createElement('button')
+sortByDateButton.classList.add('sortButton')
+sortByDateButton.textContent = 'Сортировать по дате'
+
+controlPanel.append(filterAllButton, filterCompletedButton, filterUncompletedButton, sortByDateButton)
+
+// Добавляем всё на страницу
+main.append(newCardButton, controlPanel, newCardBlock, cardContainer)
+body.append(blackBlock, header, main)
 
 // Логика карточек
 let cards = []
 let editingCard = null
+let currentFilter = 'all'
 
 function renderCards() {
   cardContainer.innerHTML = ''
-  cards.forEach((card, index) => {
 
+  let filteredCards = cards.filter(card => {
+    if (currentFilter === 'completed') return card.completed
+    if (currentFilter === 'uncompleted') return !card.completed
+    return true
+  })
+
+  filteredCards.forEach((card) => {
     let cardBlockTop = document.createElement('div')
     cardBlockTop.classList.add('cardBlockTop')
+
     let cardBlockTopLeft = document.createElement('div')
     cardBlockTopLeft.classList.add('cardBlockTopLeft')
+
     let cardBlockTopRight = document.createElement('div')
     cardBlockTopRight.classList.add('cardBlockTopRight')
 
@@ -98,16 +132,12 @@ function renderCards() {
 
     let cardBlock = document.createElement('div')
     cardBlock.classList.add('cardBlock')
-    if (card.completed) {
-      cardBlock.classList.add('completed')
-    }
+    if (card.completed) cardBlock.classList.add('completed')
 
     let cardName = document.createElement('h3')
     cardName.classList.add('cardName')
     cardName.textContent = card.cardName
-    if (card.completed) {
-      cardName.classList.add('completedName')
-    }
+    if (card.completed) cardName.classList.add('completedName')
 
     let cardText = document.createElement('p')
     cardText.classList.add('cardText')
@@ -118,7 +148,6 @@ function renderCards() {
     cardDate.textContent = card.cardDate
 
     let completeCheckbox = document.createElement('input')
-    completeCheckbox.classList.add('completeCheckbox')
     completeCheckbox.type = 'checkbox'
     completeCheckbox.classList.add('completeCheckbox')
     completeCheckbox.checked = card.completed || false
@@ -131,7 +160,7 @@ function renderCards() {
     editButton.classList.add('editButton')
     editButton.textContent = 'Изменить'
     editButton.addEventListener('click', () => {
-      editingCard = index
+      editingCard = cards.indexOf(card)
       newCardName.value = card.cardName
       newCardText.value = card.cardText
       newCardDate.value = card.cardDate
@@ -144,7 +173,7 @@ function renderCards() {
     deleteButton.classList.add('deleteButton')
     deleteButton.textContent = 'Удалить'
     deleteButton.addEventListener('click', () => {
-      cards.splice(index, 1)
+      cards.splice(cards.indexOf(card), 1)
       renderCards()
     })
 
@@ -156,6 +185,37 @@ function renderCards() {
     cardContainer.appendChild(cardBlock)
   })
 }
+
+// Кнопки фильтрации
+function setActiveFilter(button) {
+  document.querySelectorAll('.sortButton').forEach(b => b.classList.remove('activeFilter'))
+  button.classList.add('activeFilter')
+}
+
+filterAllButton.addEventListener('click', () => {
+  currentFilter = 'all'
+  setActiveFilter(filterAllButton)
+  renderCards()
+})
+
+filterCompletedButton.addEventListener('click', () => {
+  currentFilter = 'completed'
+  setActiveFilter(filterCompletedButton)
+  renderCards()
+})
+
+filterUncompletedButton.addEventListener('click', () => {
+  currentFilter = 'uncompleted'
+  setActiveFilter(filterUncompletedButton)
+  renderCards()
+})
+
+// Сортировка
+sortByDateButton.addEventListener('click', () => {
+  cards.sort((b, a) => new Date(b.cardDate) - new Date(a.cardDate))
+  renderCards()
+})
+
 
 newCardButton.addEventListener('click', () => {
   editingCard = null

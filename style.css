@@ -279,3 +279,26 @@ textarea {
 .completeCheckbox:checked{
   background-color: var(--white);
 }
+
+.controlPanel{
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 1vw;
+}
+
+.sortButton{
+  cursor: pointer;
+  border: solid var(--white);
+  font-size: 16px;
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--white);
+  margin-top: 8px;
+}
+
+.activeFilter{
+  border: solid var(--dark-white);
+  color: var(--dark-white);
+}
